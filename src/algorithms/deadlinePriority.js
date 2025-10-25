@@ -1,78 +1,38 @@
-/**
- * Deadline-Priority Scheduling Algorithm
- * Prioritizes jobs based on deadline urgency and priority level
- * Uses a combined score: earlier deadline + higher priority = higher urgency
- */
-
 export const deadlinePriority = (jobs) => {
-  const remainingJobs = [...jobs];
-  let currentTime = 0;
-  const ganttChart = [];
-  const metrics = {
-    waitingTimes: {},
-    turnaroundTimes: {},
-    completionTimes: {},
-    contextSwitches: 0,
-    deadlineMisses: 0
-  };
+  const remainingJobs=[...jobs];
+  let currentTime=0;
+  const ganttChart=[];
+  const metrics={waitingTimes:{},turnaroundTimes:{},completionTimes:{},contextSwitches:0,deadlineMisses:0};
 
-  while (remainingJobs.length > 0) {
-    // Get jobs that have arrived by current time
-    const availableJobs = remainingJobs.filter(j => j.arrivalTime <= currentTime);
-    
-    if (availableJobs.length === 0) {
-      currentTime = Math.min(...remainingJobs.map(j => j.arrivalTime));
-      continue;
-    }
-
-    // Calculate urgency score (lower is more urgent)
-    // Score = (deadline - currentTime) * priority_weight
-    // Jobs with earlier deadlines and higher priority (lower number) get selected first
-    availableJobs.forEach(job => {
-      const timeToDeadline = job.deadline - currentTime;
-      // Lower priority number means higher priority, so we use it directly
-      job.urgencyScore = timeToDeadline * job.priority;
+  while(remainingJobs.length>0){
+    const availableJobs=remainingJobs.filter(j=>j.arrivalTime<=currentTime);
+    if(!availableJobs.length){currentTime=Math.min(...remainingJobs.map(j=>j.arrivalTime)); continue;}
+    availableJobs.forEach(j=>{
+      const timeToDeadline=j.deadline-currentTime;
+      j.urgencyScore=timeToDeadline*j.priority;
     });
+    availableJobs.sort((a,b)=>a.urgencyScore-b.urgencyScore || a.priority-b.priority);
+    const selectedJob=availableJobs[0];
 
-    // Sort by urgency score (ascending - lower score = more urgent)
-    availableJobs.sort((a, b) => {
-      if (a.urgencyScore !== b.urgencyScore) {
-        return a.urgencyScore - b.urgencyScore;
-      }
-      // Tie-breaker: higher priority (lower number)
-      return a.priority - b.priority;
-    });
+    const startTime=currentTime;
+    const endTime=startTime+selectedJob.burstTime;
 
-    const selectedJob = availableJobs[0];
-    
-    const startTime = currentTime;
-    const endTime = startTime + selectedJob.burstTime;
-    
     ganttChart.push({
-      jobId: selectedJob.id,
-      jobName: selectedJob.name,
-      start: startTime,
-      end: endTime,
-      duration: selectedJob.burstTime
+      jobId:selectedJob.id,
+      jobName:selectedJob.name,
+      start:startTime,
+      end:endTime,
+      duration:selectedJob.burstTime,
+      deadline:selectedJob.deadline  // ✅ Added deadline
     });
 
-    metrics.waitingTimes[selectedJob.id] = startTime - selectedJob.arrivalTime;
-    metrics.turnaroundTimes[selectedJob.id] = endTime - selectedJob.arrivalTime;
-    metrics.completionTimes[selectedJob.id] = endTime;
-    
-    if (endTime > selectedJob.deadline) {
-      metrics.deadlineMisses++;
-    }
-
-    currentTime = endTime;
-    
-    if (ganttChart.length > 1) {
-      metrics.contextSwitches++;
-    }
-
-    // Remove selected job
-    const index = remainingJobs.findIndex(j => j.id === selectedJob.id);
-    remainingJobs.splice(index, 1);
+    metrics.waitingTimes[selectedJob.id]=startTime-selectedJob.arrivalTime;
+    metrics.turnaroundTimes[selectedJob.id]=endTime-selectedJob.arrivalTime;
+    metrics.completionTimes[selectedJob.id]=endTime;
+    if(endTime>selectedJob.deadline) metrics.deadlineMisses++;
+    currentTime=endTime;
+    if(ganttChart.length>1) metrics.contextSwitches++;
+    remainingJobs.splice(remainingJobs.findIndex(j=>j.id===selectedJob.id),1);
   }
 
   return { ganttChart, metrics };
