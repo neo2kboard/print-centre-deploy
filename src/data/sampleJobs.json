@@ -1,0 +1,56 @@
+[
+  {
+    "id": "J1",
+    "name": "Thesis Print",
+    "arrivalTime": 0,
+    "burstTime": 8,
+    "deadline": 25,
+    "priority": 1,
+    "pages": 120
+  },
+  {
+    "id": "J2",
+    "name": "Assignment",
+    "arrivalTime": 2,
+    "burstTime": 4,
+    "deadline": 15,
+    "priority": 3,
+    "pages": 20
+  },
+  {
+    "id": "J3",
+    "name": "Research Paper",
+    "arrivalTime": 3,
+    "burstTime": 9,
+    "deadline": 30,
+    "priority": 2,
+    "pages": 85
+  },
+  {
+    "id": "J4",
+    "name": "Lecture Notes",
+    "arrivalTime": 5,
+    "burstTime": 3,
+    "deadline": 12,
+    "priority": 4,
+    "pages": 15
+  },
+  {
+    "id": "J5",
+    "name": "Project Report",
+    "arrivalTime": 7,
+    "burstTime": 6,
+    "deadline": 20,
+    "priority": 2,
+    "pages": 55
+  },
+  {
+    "id": "J6",
+    "name": "Lab Manual",
+    "arrivalTime": 8,
+    "burstTime": 5,
+    "deadline": 18,
+    "priority": 3,
+    "pages": 40
+  }
+]
