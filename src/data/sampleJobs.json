@@ -3,54 +3,90 @@
     "id": "J1",
     "name": "Thesis Print",
     "arrivalTime": 0,
-    "burstTime": 8,
-    "deadline": 25,
+    "burstTime": 40,
+    "deadline": 100,
     "priority": 1,
     "pages": 120
   },
   {
     "id": "J2",
-    "name": "Assignment",
-    "arrivalTime": 2,
-    "burstTime": 4,
-    "deadline": 15,
+    "name": "CS101 Assignment",
+    "arrivalTime": 5,
+    "burstTime": 8,
+    "deadline": 30,
     "priority": 3,
-    "pages": 20
+    "pages": 24
   },
   {
     "id": "J3",
     "name": "Research Paper",
-    "arrivalTime": 3,
-    "burstTime": 9,
-    "deadline": 30,
+    "arrivalTime": 8,
+    "burstTime": 25,
+    "deadline": 70,
     "priority": 2,
-    "pages": 85
+    "pages": 75
   },
   {
     "id": "J4",
     "name": "Lecture Notes",
-    "arrivalTime": 5,
-    "burstTime": 3,
-    "deadline": 12,
+    "arrivalTime": 10,
+    "burstTime": 5,
+    "deadline": 45,
     "priority": 4,
     "pages": 15
   },
   {
     "id": "J5",
     "name": "Project Report",
-    "arrivalTime": 7,
-    "burstTime": 6,
-    "deadline": 20,
+    "arrivalTime": 12,
+    "burstTime": 18,
+    "deadline": 60,
     "priority": 2,
-    "pages": 55
+    "pages": 54
   },
   {
     "id": "J6",
     "name": "Lab Manual",
-    "arrivalTime": 8,
-    "burstTime": 5,
-    "deadline": 18,
+    "arrivalTime": 15,
+    "burstTime": 14,
+    "deadline": 55,
     "priority": 3,
-    "pages": 40
+    "pages": 42
+  },
+  {
+    "id": "J7",
+    "name": "Flyer Design",
+    "arrivalTime": 18,
+    "burstTime": 4,
+    "deadline": 40,
+    "priority": 4,
+    "pages": 12
+  },
+  {
+    "id": "J8",
+    "name": "Exam Papers",
+    "arrivalTime": 20,
+    "burstTime": 20,
+    "deadline": 80,
+    "priority": 1,
+    "pages": 60
+  },
+  {
+    "id": "J9",
+    "name": "Internship Resume",
+    "arrivalTime": 22,
+    "burstTime": 2,
+    "deadline": 35,
+    "priority": 2,
+    "pages": 6
+  },
+  {
+    "id": "J10",
+    "name": "Club Poster",
+    "arrivalTime": 25,
+    "burstTime": 10,
+    "deadline": 65,
+    "priority": 3,
+    "pages": 30
   }
 ]

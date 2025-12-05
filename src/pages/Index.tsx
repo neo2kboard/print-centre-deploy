@@ -6,8 +6,13 @@ import { sjf } from "../algorithms/sjf";
 import { srtf } from "../algorithms/srtf";
 import { roundRobin } from "../algorithms/rr";
 import { deadlinePriority } from "../algorithms/deadlinePriority";
-import sampleJobs from "../data/sampleJobs.json";
-import { PrinterIcon, PlayIcon, RotateCcw } from "lucide-react";
+
+// CHANGED: We still import sampleJobs as the default starting data
+import sampleJobs from "../data/sampleJobs.json"; 
+// NEW: Import the generator we just created
+import { generateRandomJobs } from "../data/generateJobs"; 
+
+import { PrinterIcon, PlayIcon, RotateCcw, RefreshCw } from "lucide-react"; // Added RefreshCw icon
 import { toast } from "../hooks/use-toast";
 
 export default function Index() {
@@ -15,27 +20,43 @@ export default function Index() {
   const [activeTab, setActiveTab] = useState("FCFS");
   const [isRunning, setIsRunning] = useState(false);
 
+  // NEW: Store jobs in state instead of using the raw import directly
+  // We initialize it with sampleJobs so the app doesn't start empty
+  const [jobs, setJobs] = useState<any[]>(sampleJobs);
+
+  // NEW: Function to handle randomizing
+  const handleRandomize = () => {
+    const newData = generateRandomJobs(10); // Generate 6 random jobs
+    setJobs(newData);
+    setResults(null); // Clear old results
+    toast({
+      title: "Data Randomized",
+      description: "Generated 6 new random print jobs.",
+    });
+  };
+
   // --- Simulation Function ---
   const runSimulation = async () => {
     setIsRunning(true);
     try {
+      // CHANGED: Pass 'jobs' (the state) instead of 'sampleJobs'
       const simulationResults = {
-        FCFS: fcfs(sampleJobs),
-        SJF: sjf(sampleJobs),
-        SRTF: srtf(sampleJobs),
-        "Round Robin": roundRobin(sampleJobs, 2),
-        "Deadline Priority": deadlinePriority(sampleJobs),
+        FCFS: fcfs(JSON.parse(JSON.stringify(jobs))), // Use deep copy to avoid bugs
+        SJF: sjf(JSON.parse(JSON.stringify(jobs))),
+        SRTF: srtf(JSON.parse(JSON.stringify(jobs))),
+        "Round Robin": roundRobin(JSON.parse(JSON.stringify(jobs)), 2),
+        "Deadline Priority": deadlinePriority(JSON.parse(JSON.stringify(jobs))),
       };
       setResults(simulationResults);
 
       toast({
-        title: "✅ Simulation Complete",
+        title: "Simulation Complete",
         description: "Visualization and metrics have been generated.",
       });
     } catch (error) {
       console.error(error);
       toast({
-        title: "❌ Error",
+        title: "Error",
         description: "Something went wrong during the simulation.",
       });
     } finally {
@@ -47,6 +68,8 @@ export default function Index() {
   const resetSimulation = () => {
     setResults(null);
     setActiveTab("FCFS");
+    // Optional: You can choose to reset the data back to sampleJobs here if you want
+    // setJobs(sampleJobs); 
     toast({
       title: "🔄 Simulation Reset",
       description: "All data cleared. Ready for a new run.",
@@ -75,12 +98,23 @@ export default function Index() {
             <div>
               <h2 className="text-xl font-semibold mb-1">Simulation Controls</h2>
               <p className="text-sm text-gray-500">
-                Dataset: {sampleJobs.length} print jobs with varying priorities and
+                {/* CHANGED: Use dynamic length */}
+                Dataset: {jobs.length} print jobs with varying priorities and
                 deadlines
               </p>
             </div>
 
             <div className="flex gap-3">
+               {/* NEW: Randomize Button */}
+               <button
+                onClick={handleRandomize}
+                disabled={isRunning}
+                className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg transition bg-amber-500 hover:bg-amber-600 text-white"
+              >
+                <RefreshCw className="w-5 h-5" />
+                Random Data
+              </button>
+
               <button
                 onClick={runSimulation}
                 disabled={isRunning}
@@ -110,9 +144,10 @@ export default function Index() {
 
         {/* Sample Jobs */}
         <div className="bg-white rounded-xl shadow p-6 mb-8">
-          <h3 className="text-lg font-semibold mb-4">Sample Print Jobs</h3>
+          <h3 className="text-lg font-semibold mb-4">University Print Jobs</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {sampleJobs.map((job) => (
+            {/* CHANGED: Map over 'jobs' (state) instead of 'sampleJobs' (constant) */}
+            {jobs.map((job) => (
               <div
                 key={job.id}
                 className="p-4 rounded-lg border border-gray-200 bg-gray-50"
@@ -174,11 +209,12 @@ export default function Index() {
           </div>
         )}
 
-        {/* Algorithm Descriptions */}
+        {/* Algorithm Descriptions (This part remains exactly the same as your code) */}
         <div className="bg-white rounded-xl shadow p-6 mt-8">
           <h3 className="text-lg font-semibold mb-4">Algorithm Descriptions</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {[
+             {/* ... rest of your descriptions code ... */}
+             {[
               {
                 title: "FCFS (First Come First Serve)",
                 desc: "Non-preemptive algorithm that processes jobs in arrival order. Simple but can cause convoy effect.",
